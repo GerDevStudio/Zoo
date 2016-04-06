@@ -16,6 +16,7 @@ public class MenuView {
      
     private MenuModel model;
  
+
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();

@@ -10,14 +10,14 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.jee.zoo.enclos.data.EnclosRepository;
+import org.jee.zoo.enclos.dao.EnclosDao;
 import org.jee.zoo.enclos.model.Enclos;
 
 @RequestScoped
 public class EnclosListProducer {
 
 	@Inject
-	EnclosRepository enclosRepository;
+	EnclosDao enclosDao;
 	
 	private List<Enclos> enclos;
 	
@@ -34,7 +34,7 @@ public class EnclosListProducer {
 
     @PostConstruct
     public void retrieveAllMembersOrderedByName() {
-    	enclos= enclosRepository.findAllEnclos();
+    	enclos= enclosDao.findAllEnclos();
     }
 }
 

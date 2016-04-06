@@ -40,7 +40,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jee.zoo.animal.data.IAnimalRepository;
+import org.jee.zoo.animal.dao.AnimalDao;
 import org.jee.zoo.animal.model.Animal;
 import org.jee.zoo.animal.model.AnimalReduced;
 import org.jee.zoo.animal.service.IAnimalRegistration;
@@ -56,24 +56,24 @@ import org.jee.zoo.animal.service.IAnimalRegistration;
 public class AnimalResourceRestService {
 
 	@Inject
-	private Logger				log;
+	private Logger log;
 
 	@Inject
-	private Validator			validator;
+	private Validator validator;
 
 	@Inject
-	private IAnimalRepository	repository;
+	private AnimalDao animalDao;
 
 	@Inject
-	IAnimalRegistration			registration;
+	IAnimalRegistration registration;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	public List<Animal> listAllAnimals() {
-//		return repository.findAllAnimal();
-//	}
+	// public List<Animal> listAllAnimals() {
+	// return repository.findAllAnimal();
+	// }
 	public List<AnimalReduced> listAllAnimals() {
-		return repository.findAllAnimalReduced();
+		return animalDao.findAllAnimalReduced();
 	}
 
 	@GET
@@ -81,7 +81,7 @@ public class AnimalResourceRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listAllMembersXML() {
 		StringBuffer bf = new StringBuffer();
-		for (Animal m : repository.findAllAnimal()) {
+		for (Animal m : animalDao.findAllAnimal()) {
 			bf.append(m.getName());
 			bf.append("\n---\n");
 
@@ -93,7 +93,7 @@ public class AnimalResourceRestService {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Animal lookupAnimalById(@PathParam("id") int id) {
-		Animal animal = repository.findById(id);
+		Animal animal = animalDao.findById(id);
 		if (animal == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
@@ -206,7 +206,7 @@ public class AnimalResourceRestService {
 	public boolean nameAlreadyExists(String name) {
 		Animal animal = null;
 		try {
-			animal = repository.findByName(name);
+			animal = animalDao.findByName(name);
 		} catch (NoResultException e) {
 			// ignore
 		}

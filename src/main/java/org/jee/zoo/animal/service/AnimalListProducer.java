@@ -1,6 +1,5 @@
 package org.jee.zoo.animal.service;
 
-
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,32 +10,30 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.jee.zoo.animal.data.IAnimalRepository;
+import org.jee.zoo.animal.dao.AnimalDao;
 import org.jee.zoo.animal.model.Animal;
-
 
 @RequestScoped
 public class AnimalListProducer {
 
 	@Inject
-	IAnimalRepository animalRepository;
-	
+	AnimalDao animalDao;
+
 	private List<Animal> animals;
-	
+
 	@Produces
 	@Named
-	public List<Animal>getAnimals() {
+	public List<Animal> getAnimals() {
 		System.out.println("temoin in getAnimals");
 		return animals;
 	}
-	
-    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Animal animal) {
-        retrieveAllMembersOrderedByName();
-    }
 
-    @PostConstruct
-    public void retrieveAllMembersOrderedByName() {
-        animals= animalRepository.findAllAnimal();
-    }
+	public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Animal animal) {
+		retrieveAllMembersOrderedByName();
+	}
+
+	@PostConstruct
+	public void retrieveAllMembersOrderedByName() {
+		animals = animalDao.findAllAnimal();
+	}
 }
-
